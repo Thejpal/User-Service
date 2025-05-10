@@ -1,8 +1,12 @@
 from typing import Optional
-from fastapi import HTTPException, status
+import uuid
+from fastapi import HTTPException, status, Depends
+from fastapi.security import OAuth2PasswordBearer
 from src.db import User, session
 from src.model import UserModel
 from passlib.hash import bcrypt
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "/auth/login")
 
 class UserService:
     def __init__(self):
@@ -25,3 +29,6 @@ class UserService:
             raise HTTPException(status_code = status.HTTP_409_CONFLICT, detail = "Failed to register the user")
         
         return UserModel(**registered_user.__dict__)
+    
+def get_user(token: str = Depends(oauth2_scheme)):
+    return UserModel(user_id = uuid.uuid4(), name = token, email = "")
