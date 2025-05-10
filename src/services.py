@@ -30,5 +30,19 @@ class UserService:
         
         return UserModel(**registered_user.__dict__)
     
+    def validate_user(self, user_name: str, password: str) -> UserModel:
+        "Validate user credentials"
+        user = session.query(User).where(User.name == user_name and User.password == bcrypt.hash(password)).first()
+
+        if user:
+            return UserModel(**user.__dict__)
+        
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Invalid credentials")
+    
 def get_user(token: str = Depends(oauth2_scheme)):
-    return UserModel(user_id = uuid.uuid4(), name = token, email = "")
+    user = session.query(User).where(User.name == token).first()
+
+    if user:
+        return UserModel(**user.__dict__)
+    
+    raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, details = "User not found")
