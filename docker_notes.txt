@@ -1,0 +1,13 @@
+FROM command is used to select the image with a specific tag that we want to use
+COPY command opies all the files from the local directory into the image
+WORKDIR command switches the directory we are working from inside the image
+RUN runs any necessary commands that are needed
+CMD is the final command that runs the application
+
+docker build -t <name>:<version> <Dockerfile_location> -> Command to build an image from the docker file
+docker images -> Shows all the built images
+docker run -d -p <local_port>:<container_exposed_port> <image_name>:<image_tag> -> Runs the container with the specified image
+docker ps -> Shows all the running containers
+docker ps -a -> Shows all the containers including those that were stopped
+docker stop <container_name_or_ID> -> Stops a running container
+docker start <container_name_or_ID> -> Starts a stopped container
