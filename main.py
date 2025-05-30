@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import FastAPI, HTTPException, status, Depends
+from fastapi import FastAPI, Depends
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field, model_validator
 from src.model import UserModel
@@ -33,7 +33,7 @@ def register_user(user_request: UserRequest, user_service: UserService = Depends
     return f"Hi {user.name}. Your registration is successful. Please login to continue."
 
 @app.get("/auth/user", response_model = UserResponse)
-def get_user(current_user: UserResponse = Depends(get_user)):
+def get_current_user(current_user: UserResponse = Depends(get_user)):
     return current_user
 
 @app.post("/auth/login", response_model = Token)
