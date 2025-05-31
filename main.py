@@ -4,9 +4,12 @@ from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field, model_validator
 from src.model import UserModel
 from src.services import UserService, get_user
+from middleware import CustomMiddleware
 from logger import logger
 
 app = FastAPI()
+app.add_middleware(middleware_class = CustomMiddleware)
+
 logger.info("Starting User Service....")
 
 class UserRequest(BaseModel):
