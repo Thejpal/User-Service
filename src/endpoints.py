@@ -28,12 +28,12 @@ class Token(BaseModel):
     token_type: str
 
 @auth.post("/register")
-def register_user(user_request: UserRequest, user_service: UserService = Depends()):
+def register_user(user_request: UserRequest, user_service: UserService = Depends()) -> str:
     user = user_service.create_user(name = user_request.name, email = user_request.email, password = user_request.password)
     return f"Hi {user.name}. Your registration is successful. Please login to continue."
 
 @auth.get("/user", response_model = UserResponse)
-def get_current_user(current_user: UserResponse = Depends(get_user)):
+def get_current_user(current_user: UserResponse = Depends(get_user)) -> UserResponse:
     return current_user
 
 @auth.post("/login", response_model = Token)

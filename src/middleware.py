@@ -11,6 +11,6 @@ class CustomMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
         
         if "application/json" in response.headers.get("content-type", ""):
-            response.headers["content-type"] = "application/json charset=utf-8"
+            response.headers["content-type"] = "application/json; charset=utf-8"
 
         return response

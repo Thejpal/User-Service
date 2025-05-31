@@ -16,7 +16,7 @@ class UserService:
         "Initializes the User service class"
         pass
 
-    def __create_access_token(self, user: UserModel, expires_delta: timedelta = timedelta(minutes = 1)):
+    def __create_access_token(self, user: UserModel, expires_delta: timedelta = timedelta(minutes = 1)) -> str:
         "Creates a JWT token for the user"
         user_json = user.model_dump().copy()
 
@@ -31,7 +31,7 @@ class UserService:
             raise HTTPException(status_code = status.HTTP_406_NOT_ACCEPTABLE, detail = "User with this name already exists")
         
         password_hash = bcrypt.hash(password)
-        new_user = User(id = str(uuid.uuid4().int), name = name, email = email, password = password_hash)
+        new_user = User(id = str(uuid.uuid4()), name = name, email = email, password = password_hash)
         logger.info(f"Creating new user with name {name} and email {email}")
         session.add(new_user)
         session.commit()
@@ -55,7 +55,7 @@ class UserService:
         logger.error(f"Invalid credentials for user {user_name}")
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Invalid username or password")
     
-def get_user(token: str = Depends(oauth2_scheme)):
+def get_user(token: str = Depends(oauth2_scheme)) -> UserModel:
     user_claims: dict = jwt.decode(jwt = token, key = settings.jwt_secret_key, algorithms = [settings.algorithm])
 
     if user_claims.get("user_id"):
