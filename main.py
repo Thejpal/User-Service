@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from src.endpoints import auth
-from middleware import CustomMiddleware
-from logger import logger
+from src.middleware import CustomMiddleware
+from src.logger import logger
 
 app = FastAPI()
 app.add_middleware(middleware_class = CustomMiddleware)
