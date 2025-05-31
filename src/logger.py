@@ -10,7 +10,8 @@ log_record = {
     "message": "%(message)s",
     "name": "%(name)s",
     "filename": "%(filename)s",
-    "function": "%(funcName)s"
+    "function": "%(funcName)s",
+    "line": "%(lineno)d"
 }
 
 # Create format for the log message

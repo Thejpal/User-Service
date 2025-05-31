@@ -5,6 +5,7 @@ from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from src.db import User, session
 from src.settings import settings
+from src.logger import logger
 from src.model import UserModel
 from passlib.hash import bcrypt
 
@@ -26,16 +27,19 @@ class UserService:
     def create_user(self, name: str, email: Optional[str], password: str) -> UserModel:
         "Registers a new user"
         if session.query(User).where(User.name == name).first():
+            logger.error(f"User with name {name} already exists")
             raise HTTPException(status_code = status.HTTP_406_NOT_ACCEPTABLE, detail = "User with this name already exists")
         
         password_hash = bcrypt.hash(password)
         new_user = User(id = str(uuid.uuid4().int), name = name, email = email, password = password_hash)
+        logger.info(f"Creating new user with name {name} and email {email}")
         session.add(new_user)
         session.commit()
         
         registered_user = session.query(User).where(User.name == name).first()
 
         if not registered_user:
+            logger.error(f"Something went wrong while registering the user {name}")
             raise HTTPException(status_code = status.HTTP_409_CONFLICT, detail = "Failed to register the user")
         
         return UserModel(**registered_user.__dict__)
@@ -45,8 +49,10 @@ class UserService:
         user = session.query(User).where(User.name == user_name and User.password == bcrypt.hash(password)).first()
 
         if user:
+            logger.info(f"Creating access token for user {user_name}")
             return self.__create_access_token(user = UserModel(**user.__dict__))
         
+        logger.error(f"Invalid credentials for user {user_name}")
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Invalid username or password")
     
 def get_user(token: str = Depends(oauth2_scheme)):
@@ -56,8 +62,11 @@ def get_user(token: str = Depends(oauth2_scheme)):
         user = session.query(User).where(User.id == user_claims["user_id"]).first()
 
         if user:
+            logger.info(f"User {user.name} found with ID {user.id}")
             return UserModel(**user.__dict__)
         else:
+            logger.error(f"User with ID {user_claims['user_id']} not found")
             raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "User not found")
     
+    logger.error("Invalid token provided")
     raise HTTPException(status_code = status.HTTP_401_UNAUTHORIZED, detail = "Invalid credentials")
