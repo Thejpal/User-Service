@@ -1,9 +1,18 @@
 from sqlalchemy import String, Column, create_engine
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
+from sqlalchemy_utils import database_exists, create_database
 from src.settings import settings
+from src.logger import logger
 
 engine = create_engine(settings.database_url)
 Base = declarative_base()
+
+def create_db():
+    if not database_exists(engine.url):
+        create_database(engine.url)
+        logger.info("Database created successfully")
+    
+    logger.info(f"Database exists: {database_exists(engine.url)}")
 
 class User(Base):
     __tablename__ = "user"
@@ -13,7 +22,6 @@ class User(Base):
     email = Column(String)
     password = Column(String, nullable = False)
 
-# Base.metadata.create_all(engine)
 Session = sessionmaker(engine)
 
 session = Session()
