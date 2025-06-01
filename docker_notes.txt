@@ -13,4 +13,4 @@ docker stop <container_name_or_ID> -> Stops a running container
 docker start <container_name_or_ID> -> Starts a stopped container
 docker rm <container_name_or_ID> -> Removes or deleted a stopped container
 docker rmi <image_name>:<tag_or_version> -> Removes or deletes an image
-docker exec -it -d <container_name_or_ID> <shell> -> Opens the shell of the container to explore the continer's file system
+docker exec -it <container_name_or_ID> <shell> -> Opens the shell of the container to explore the continer's file system
