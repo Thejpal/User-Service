@@ -1,7 +1,6 @@
 .dockerignore
 .gitignore
-.env
-*.db
 Dockerfile
 logs/
 __pycache__/
+postgres_data/
