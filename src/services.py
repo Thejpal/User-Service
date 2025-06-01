@@ -16,7 +16,7 @@ class UserService:
         "Initializes the User service class"
         pass
 
-    def __create_access_token(self, user: UserModel, expires_delta: timedelta = timedelta(minutes = 1)) -> str:
+    def __create_access_token(self, user: UserModel, expires_delta: timedelta = timedelta(minutes = settings.token_expiration_minutes)) -> str:
         "Creates a JWT token for the user"
         user_json = user.model_dump().copy()
 
