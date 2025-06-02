@@ -3,6 +3,7 @@ services:
     container_name: user-service
     build:
       dockerfile: Dockerfile
+    image: user-service:latest
     ports:
       - "8000:8000"
     depends_on:
