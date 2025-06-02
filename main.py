@@ -8,9 +8,8 @@ from src.db import create_db
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting User Service....")
-    
+
     create_db()
-    logger.info("Database and tables created successfully")
     
     yield
     logger.info("Stopping User Service....")

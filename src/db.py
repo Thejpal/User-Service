@@ -9,10 +9,11 @@ Base = declarative_base()
 
 def create_db():
     if not database_exists(engine.url):
-        create_database(engine.url)
+        create_database(engine.url) # For creating postgresql database
+        # Base.metadata.create_all(engine) # For creating sqlite database
         logger.info("Database created successfully")
-    
-    logger.info(f"Database exists: {database_exists(engine.url)}")
+    else:
+        logger.info("Database already exists")
 
 class User(Base):
     __tablename__ = "user"
