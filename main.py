@@ -1,15 +1,17 @@
-from fastapi import FastAPI
 from contextlib import asynccontextmanager
+
+from fastapi import FastAPI
+
 from src.endpoints import auth
 from src.middleware import CustomMiddleware
 from src.logger import logger
-from src.db import create_db
+from src.db import initialize_database
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting User Service....")
 
-    create_db()
+    initialize_database()
     
     yield
     logger.info("Stopping User Service....")

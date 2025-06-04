@@ -1,13 +1,16 @@
-import jwt, uuid
+import uuid
 from datetime import datetime, timedelta
 from typing import Optional
+
+import jwt
+from passlib.hash import bcrypt
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
+
 from src.db import User, session
 from src.settings import settings
 from src.logger import logger
 from src.model import UserModel
-from passlib.hash import bcrypt
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "/auth/login")
 
@@ -62,7 +65,7 @@ def get_user(token: str = Depends(oauth2_scheme)) -> UserModel:
         user = session.query(User).where(User.id == user_claims["user_id"]).first()
 
         if user:
-            logger.info(f"User {user.name} found with ID {user.id}")
+            logger.debug(f"User {user.name} found with ID {user.id}")
             return UserModel(**user.__dict__)
         else:
             logger.error(f"User with ID {user_claims['user_id']} not found")

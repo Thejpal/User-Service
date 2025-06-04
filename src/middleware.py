@@ -1,5 +1,6 @@
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import Request, Response
+
 from src.logger import logger
 
 class CustomMiddleware(BaseHTTPMiddleware):

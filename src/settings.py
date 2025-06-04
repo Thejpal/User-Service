@@ -8,7 +8,9 @@ class Settings(BaseSettings):
     postgres_user: str
     postgres_password: str
     postgres_db: str
+    service_name: str
     
     model_config = SettingsConfigDict(env_file = ".env")
 
-settings = Settings()
+# Setting type ignore comment to suppress mypy warning about missing initialization arguments for Settings class
+settings = Settings()  # type: ignore

@@ -1,7 +1,9 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field, model_validator
-from typing import Optional
+
 from src.model import UserModel
 from src.services import UserService, get_user
 

@@ -1,7 +1,9 @@
 import logging, sys, json
 
+from settings import settings
+
 # Get logger
-logger = logging.getLogger("User Service")
+logger = logging.getLogger(settings.service_name)
 
 # Set the format for the log record
 log_record = {

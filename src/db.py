@@ -1,6 +1,9 @@
+import time
+
 from sqlalchemy import String, Column, create_engine, inspect
 from sqlalchemy.orm import sessionmaker, Session, declarative_base
 from sqlalchemy_utils import database_exists, create_database
+
 from src.settings import settings
 from src.logger import logger
 
