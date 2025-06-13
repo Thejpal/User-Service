@@ -18,20 +18,30 @@ class User(Base):
     email = Column(String)
     password = Column(String, nullable = False)
 
-def create_db():
-    if not database_exists(engine.url):
-        create_database(engine.url) # For creating postgresql database
-        logger.info("Database created successfully")
-    else:
-        logger.info("Database already exists")
-    
-    inspector = inspect(engine)
-    if not inspector.has_table("user"):
-        Base.metadata.create_all(engine) # For creating tables
-        logger.info("User table created successfully")
-    else:
-        logger.info("User table already exists")
+def initialize_database():
+    i = 0
+    while i<3:
+        try:
+            if not database_exists(engine.url):
+                create_database(engine.url) # For creating postgresql database
+                logger.info("Database created successfully")
+            else:
+                logger.debug("Database already exists")
+            
+            inspector = inspect(engine)
+            if not inspector.has_table("user"):
+                Base.metadata.create_all(engine) # For creating tables
+                logger.info("User table created successfully")
+            else:
+                logger.debug("User table already exists")
+            
+            logger.debug("Breaking out of the loop after successful creation")
+            break
+        
+        except Exception as e:
+            i += 1
+            time.sleep(2)
+            logger.error(f"Failed to create database or table with error: {e}. Retrying times {i+1} after 2 seconds...")
 
 Session = sessionmaker(engine)
-
 session = Session()
