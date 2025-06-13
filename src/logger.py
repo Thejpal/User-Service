@@ -1,6 +1,6 @@
 import logging, sys, json
 
-from settings import settings
+from src.settings import settings
 
 # Get logger
 logger = logging.getLogger(settings.service_name)
