@@ -4,3 +4,4 @@ logs/
 __pycache__/
 postgres_data/
 *.db
+docker_notes.txt
