@@ -1,6 +1,7 @@
 import logging, sys, json
 
 from src.settings import settings
+from src.context import request_context
 
 # Get logger
 logger = logging.getLogger(settings.service_name)
@@ -9,6 +10,7 @@ logger = logging.getLogger(settings.service_name)
 log_record = {
     "timestamp": "%(asctime)s",
     "level_name": "%(levelname)s",
+    "request_id": request_context.get().get("request_id"),
     "message": "%(message)s",
     "name": "%(name)s",
     "filename": "%(filename)s",

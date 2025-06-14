@@ -1,12 +1,21 @@
+from uuid import uuid4
+
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import Request, Response
 
 from src.logger import logger
+from src.context import request_context
 
 class CustomMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next) -> Response:
         path = request.url.path
         method = request.method
+        request_context.set({
+            "request_id": str(uuid4()),
+            "path": path,
+            "method": method,
+            "client_ip": request.client.host if request.client is not None else "None"
+        })
         
         logger.info(f"Request: {method} {path}")
         response = await call_next(request)
