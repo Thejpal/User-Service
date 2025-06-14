@@ -1,35 +1,34 @@
 import logging, sys, json
+from datetime import datetime
 
 from src.settings import settings
 from src.context import request_context
 
+class JSONFormatter(logging.Formatter):
+    def format(self, record):
+        log_record = {
+            "timestamp": datetime.now().isoformat(),
+            "level_name":record.levelname,
+            "request_id": request_context.get().get("request_id"),
+            "message": record.getMessage(),
+            "name": record.name,
+            "filename": record.filename,
+            "function": record.funcName,
+            "line": record.lineno
+        }
+
+        return json.dumps(log_record)
+
 # Get logger
 logger = logging.getLogger(settings.service_name)
-
-# Set the format for the log record
-log_record = {
-    "timestamp": "%(asctime)s",
-    "level_name": "%(levelname)s",
-    "request_id": request_context.get().get("request_id"),
-    "message": "%(message)s",
-    "name": "%(name)s",
-    "filename": "%(filename)s",
-    "function": "%(funcName)s",
-    "line": "%(lineno)d"
-}
-
-# Create format for the log message
-formatter = logging.Formatter(
-    fmt = json.dumps(log_record)
-)
 
 # Create handlers
 stream_handler = logging.StreamHandler(sys.stdout)
 file_handler = logging.FileHandler("logs/app.log")
 
 # Set format for the logged messages
-stream_handler.setFormatter(formatter)
-file_handler.setFormatter(formatter)
+stream_handler.setFormatter(JSONFormatter())
+file_handler.setFormatter(JSONFormatter())
 
 # Add handlers to the logger
 logger.handlers = [stream_handler, file_handler]
