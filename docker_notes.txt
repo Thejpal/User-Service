@@ -14,3 +14,6 @@ docker start <container_name_or_ID> -> Starts a stopped container
 docker rm <container_name_or_ID> -> Removes or deleted a stopped container
 docker rmi <image_name>:<tag_or_version> -> Removes or deletes an image
 docker exec -it <container_name_or_ID> <shell> -> Opens the shell of the container to explore the continer's file system
+
+docker-compose up -> Runs the docker-compose.yml file
+docker-compose down -> Removes the containers and network created by the docker-compose.yml file
