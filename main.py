@@ -2,10 +2,10 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from src.endpoints import auth
+from src.auth.controller import auth
 from src.middleware import CustomMiddleware
 from src.logger import logger
-from src.db import initialize_database
+from src.database.db import initialize_database
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

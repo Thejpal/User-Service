@@ -7,10 +7,11 @@ from passlib.hash import bcrypt
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 
-from src.db import User, session
+from src.database.db import session
+from src.entities.user import User
 from src.settings import settings
 from src.logger import logger
-from src.model import UserModel
+from src.auth.model import UserModel
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl = "/auth/login")
 
